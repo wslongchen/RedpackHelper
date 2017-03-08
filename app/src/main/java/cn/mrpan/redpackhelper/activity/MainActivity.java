@@ -10,12 +10,16 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.accessibility.AccessibilityManager;
+import android.widget.AnalogClock;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -137,6 +141,7 @@ public class MainActivity extends Activity implements AccessibilityManager.Acces
         } else {
             pluginStatusText.setText(R.string.service_on);
             pluginStatusIcon.setBackgroundResource(R.mipmap.ic_start);
+            showDialog();
         }
     }
 
@@ -154,6 +159,39 @@ public class MainActivity extends Activity implements AccessibilityManager.Acces
             }
         }
         return false;
+    }
+
+    /***
+     * 打开对话框
+     */
+    public void showDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
+        final View layout = inflater.inflate(R.layout.dialog_tip, null);//获取自定义布局
+        builder.setView(layout);
+       /* builder.setIcon(R.drawable.ic_launcher);//设置标题图标
+        builder.setTitle(R.string.hello_world);//设置标题内容*/
+        //builder.setMessage("");//显示自定义布局内容
+        final AlertDialog dlg = builder.create();
+
+        Button button = (Button)layout.findViewById(R.id.btn_apply);
+        ImageView close = (ImageView)layout.findViewById(R.id.iv_close);
+        button.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View arg0) {
+
+            }
+        });
+        close.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                dlg.dismiss();
+            }
+        });
+
+        dlg.show();
     }
 }
 
