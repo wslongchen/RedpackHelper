@@ -23,7 +23,9 @@ $RECYCLE.BIN/
 
 # OSX
 # =========================
-
+/build
+.idea
+.gradle
 .DS_Store
 .AppleDouble
 .LSOverride
