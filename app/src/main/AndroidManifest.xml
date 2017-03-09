@@ -43,9 +43,24 @@
             <meta-data android:name="android.accessibilityservice"
                 android:resource="@xml/accessible_service_config"/>
         </service>
+        <service
+            android:name=".service.CiycleService"
+            android:priority="1000"
+            android:process="cn.mrpan.redpackhelper.service">
+            <intent-filter>
+                <!-- 系统启动完成后会调用-->
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.DATE_CHANGED" />
+                <action android:name="android.intent.action.MEDIA_MOUNTED" />
+                <action android:name="android.intent.action.USER_PRESENT" />
+                <action android:name="android.intent.action.ACTION_TIME_TICK" />
+                <action android:name="android.intent.action.ACTION_POWER_CONNECTED" />
+                <action android:name="android.intent.action.ACTION_POWER_DISCONNECTED" />
+            </intent-filter>
+        </service>
         <provider
             android:name="android.support.v4.content.FileProvider"
-            android:authorities="xyz.monkeytong.hongbao.fileProvider"
+            android:authorities="cn.mrpan.redpackhelper.fileProvider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

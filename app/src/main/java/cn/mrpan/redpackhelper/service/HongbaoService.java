@@ -19,6 +19,7 @@ import android.view.accessibility.AccessibilityNodeInfo;
 
 import java.util.List;
 
+import cn.mrpan.redpackhelper.utils.AccessibilityHelper;
 import cn.mrpan.redpackhelper.utils.HongbaoSignature;
 import cn.mrpan.redpackhelper.utils.PowerUtil;
 
@@ -50,6 +51,8 @@ public class HongbaoService extends AccessibilityService implements SharedPrefer
     private PowerUtil powerUtil;
     private SharedPreferences sharedPreferences;
 
+    private String[] packageNames = { "com.android.packageinstaller", "com.lenovo.security", "com.lenovo.safecenter" };
+
     /**
      * AccessibilityEvent
      *
@@ -57,6 +60,12 @@ public class HongbaoService extends AccessibilityService implements SharedPrefer
      */
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
+        String pkgName = event.getPackageName().toString();
+        if("com.tencent.mm".equals(pkgName)){
+
+        }else if("com.alibaba.android.rimet".equals(pkgName)){
+            doSomethingToDingding(event);
+        }
         if (sharedPreferences == null) return;
 
         setCurrentActivityName(event);
@@ -72,6 +81,62 @@ public class HongbaoService extends AccessibilityService implements SharedPrefer
             mChatMutex = true;
             if (sharedPreferences.getBoolean("pref_watch_chat", false)) watchChat(event);
             mChatMutex = false;
+        }
+
+
+    }
+
+    boolean isDakaUi=false;
+    boolean isMoneyEnd=false;
+    boolean isNightEnd=false;
+    private void doSomethingToDingding(AccessibilityEvent event) {
+        if (event.getEventType() != AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
+            return;
+        }
+        if(isMoneyEnd && isNightEnd){
+            return;
+        }
+        AccessibilityNodeInfo eventSource = event.getSource();
+        if(eventSource.getPackageName().equals("com.alibaba.android.rimet")){
+            List<AccessibilityNodeInfo> nodes = eventSource.findAccessibilityNodeInfosByText("工作");
+            List<AccessibilityNodeInfo> nodes_koaqins = eventSource.findAccessibilityNodeInfosByText("考勤打卡");
+            List<AccessibilityNodeInfo> nodes_qiandao = eventSource.findAccessibilityNodeInfosByText("签到");
+            List<AccessibilityNodeInfo> nodes_rizhi = eventSource.findAccessibilityNodeInfosByText("日志");
+            List<AccessibilityNodeInfo> nodes_daka = eventSource.findAccessibilityNodeInfosByText("上班打卡");
+            List<AccessibilityNodeInfo> nodes_daka2 = eventSource.findAccessibilityNodeInfosByText("下班打卡");
+            if(nodes_koaqins.size()>0 && nodes_qiandao.size()>0 && nodes_rizhi.size()>0){
+                AccessibilityHelper.performClick(nodes_koaqins.get(nodes_koaqins.size()-1));
+                isDakaUi=true;
+                return;
+            }
+            if(isDakaUi){
+                if(nodes_daka.size()>0){
+                    //AccessibilityHelper.performClick(nodes_daka.get(nodes_daka.size()-1));
+                    Log.e("打卡","上班打卡");
+                    isMoneyEnd=true;
+                }else{
+                    if(nodes_daka2.size()>0){
+                        if(!isMoneyEnd)
+                            isMoneyEnd=true;
+                    }
+                }
+                if(nodes_daka2.size()>0){
+                    //AccessibilityHelper.performClick(nodes_daka2.get(nodes_daka2.size()-1));
+                    Log.e("打卡","下班打卡");
+                    isNightEnd=true;
+                }else{
+                    if(nodes_daka.size()>0){
+                        if(!isNightEnd)
+                            isNightEnd=true;
+                    }
+                }
+            }
+            if(nodes.size()>0){
+                for(AccessibilityNodeInfo node:nodes){
+                    AccessibilityHelper.performClick(nodes.get(nodes.size()-1));
+                   // Log.e("ssssssss",node.getText().toString());
+                }
+            }
         }
     }
 

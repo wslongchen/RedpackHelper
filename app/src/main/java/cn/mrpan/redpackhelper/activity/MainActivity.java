@@ -37,6 +37,8 @@ import android.widget.Toast;
 import java.util.List;
 
 import cn.mrpan.redpackhelper.R;
+import cn.mrpan.redpackhelper.service.CiycleService;
+import cn.mrpan.redpackhelper.utils.AppUtils;
 import cn.mrpan.redpackhelper.utils.ConnectivityUtil;
 import cn.mrpan.redpackhelper.utils.UpdateTask;
 
@@ -63,6 +65,7 @@ public class MainActivity extends Activity implements AccessibilityManager.Acces
         accessibilityManager = (AccessibilityManager) getSystemService(Context.ACCESSIBILITY_SERVICE);
         accessibilityManager.addAccessibilityStateChangeListener(this);
         updateServiceStatus();
+        startedService();
 
     }
 
@@ -111,7 +114,7 @@ public class MainActivity extends Activity implements AccessibilityManager.Acces
         super.onDestroy();
     }
 
-    public void openMore(){
+    public void openMore(View view){
         Toast.makeText(this, getString(R.string.click_more), Toast.LENGTH_LONG).show();
     }
 
@@ -270,6 +273,16 @@ public class MainActivity extends Activity implements AccessibilityManager.Acces
         }
     }
 
-
+    /**
+     * 开启周期服务
+     */
+    private void startedService() {
+        //开启服务
+        Intent intent = new Intent(MainActivity.this,CiycleService.class);
+        startService(intent);
+        if(!isServiceEnabled()){
+            Toast.makeText(this,"请开启插件！",Toast.LENGTH_SHORT).show();
+        }
+    }
 }
 
