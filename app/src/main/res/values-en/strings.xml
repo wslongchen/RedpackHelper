@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">RedpackHelper</string>
     <string name="app_version">v1.0</string>
-    <string name="app_description">∠( ᐛ 」∠)_ Instructions ∠( ᐛ 」∠)_\n\n ○ Turn on the Accessibility switch\n ○ Go back to WeChat\n ○ Wait for money comes in\n\n Please submit your feedback on GitHub Issues Page~\n https://github.com/geeeeeeeeek/WeChatLuckyMoney</string>
+    <string name="app_description">∠( ᐛ 」∠)_ Instructions ∠( ᐛ 」∠)_\n\n ○ Turn on the Accessibility switch\n ○ Go back to WeChat\n ○ Wait for money comes in</string>
     <string name="preference">Preferences</string>
     <string name="update_error">An error occurred. Please manually update from GitHub Release Page. (ฅ´ω`ฅ)</string>
     <string name="update_new_seg1">New version found.(</string>
@@ -12,10 +12,8 @@
     <string name="service_on">Turn On</string>
     <string name="pref_watch_exclude_words_summary">Skip red packets with these phrases (separated by space)</string>
     <string name="pref_comment_words_summary">Randomly choose reply from these phrases (separated by space)</string>
-    <string name="url_github_issues">https://github.com/geeeeeeeeek/WeChatLuckyMoney/issues</string>
-    <string name="home_banner_ad_unit_id">ca-app-pub-8428619221469478/4736153346</string>
-    <string name="webview_banner_ad_unit_id">ca-app-pub-8428619221469478/4163694548</string>
-    <string name="community">Community</string>
+    <string name="url_github_issues">https://github.com/wslongchen/RedpackHelper/issues</string>
+    <string name="community">More</string>
     <string name="settings">Settings</string>
     <string name="uber_ad_title">Your first trip is free up to ￥12</string>
     <string name="uber_ad_text">Get Free Ride Now</string>
@@ -54,4 +52,5 @@
     <string name="delay_open">open red packets.</string>
     <string name="delay_sec">&#160;seconds&#160;</string>
     <string name="delay_then">and then&#160;</string>
+    <string name="click_more">more could contact me</string>
 </resources>

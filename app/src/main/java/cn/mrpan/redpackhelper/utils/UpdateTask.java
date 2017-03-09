@@ -22,7 +22,7 @@ public class UpdateTask extends AsyncTask<String, String, String> {
     public static int count = 0;
     private Context context;
     private boolean isUpdateOnRelease;
-    public static final String updateUrl = "https://api.github.com/repos/geeeeeeeeek/WeChatLuckyMoney/releases/latest";
+    public static final String updateUrl = "https://api.github.com/repos/wslongchen/RedpackHelper/releases/latest";
 
     public UpdateTask(Context context, boolean needUpdate) {
         this.context = context;

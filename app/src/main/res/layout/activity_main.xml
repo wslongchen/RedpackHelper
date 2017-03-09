@@ -2,6 +2,7 @@
                 xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:id="@+id/main_content"
                 tools:context=".activity.MainActivity"
                 android:background="#fff">
     <ImageView
@@ -62,7 +63,7 @@
                       android:orientation="vertical"
                       android:layout_weight="0.35"
                       android:layout_marginRight="5dp"
-                      android:onClick="openGitHub">
+                      android:onClick="openMore">
             <ImageView
                     android:layout_width="24dp"
                     android:layout_height="24dp"
@@ -141,7 +142,7 @@
             android:layout_alignParentBottom="false"
             android:layout_above="@+id/linearLayout2"
             android:layout_marginBottom="8dp"
-            android:onClick="openUber">
+            >
 
     </LinearLayout>
     <LinearLayout android:id="@+id/linearLayout2"

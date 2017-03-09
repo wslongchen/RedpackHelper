@@ -12,12 +12,18 @@
                 android:summary="@string/watch_notifications_hint"
                 android:defaultValue="true"
                 android:layout="@layout/preference_checkbox"/>
+
         <CheckBoxPreference
                 android:key="pref_watch_list"
                 android:title="@string/watch_list"
                 android:summary="@string/watch_list_hint"
                 android:layout="@layout/preference_checkbox"
                 android:defaultValue="false"/>
+        <SwitchPreference
+            android:key="powerClear"
+            android:title="是否自动清理缓存"
+            android:enabled="false"
+            android:summary="此功能需要权限" />
     </PreferenceCategory>
     <PreferenceCategory
             android:title="@string/anti_block_options"

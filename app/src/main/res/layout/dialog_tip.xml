@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
+    android:layout_height="match_parent"
+    android:id="@+id/tip_popup"
+    android:background="@android:color/transparent">
+    <ImageView
+        android:id="@+id/iv_close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="20dp"
+        android:layout_alignParentRight="true"
+        android:src="@mipmap/home_popup_close"/>
     <ImageView
         android:id="@+id/iv_bg"
         android:layout_width="315dp"
@@ -17,18 +25,22 @@
         android:layout_height="477dp"
         android:layout_centerInParent="true"
         >
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@mipmap/bg_snow"
-            android:layout_alignParentStart="true" />
+
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:background="@color/statusBar"
-            android:layout_marginTop="25dp"
-            android:layout_above="@+id/btn_apply">
+            android:layout_above="@+id/btn_apply"
+            android:layout_marginTop="35dp">
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@mipmap/qrcode_wechat"
+                android:id="@+id/main_bg_wechat"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentBottom="true">
 
+            </ImageView>
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -46,15 +58,9 @@
             android:layout_height="63dp"
             android:layout_centerHorizontal="true"
             android:layout_alignParentBottom="true"
-            android:background="@mipmap/home_btn_popup_dredge"/>
+            android:background="@mipmap/setting"/>
     </RelativeLayout>
 
-    <ImageView
-        android:id="@+id/iv_close"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="20dp"
-        android:layout_alignParentRight="true"
-        android:src="@mipmap/home_popup_close"/>
+
 
 </RelativeLayout>

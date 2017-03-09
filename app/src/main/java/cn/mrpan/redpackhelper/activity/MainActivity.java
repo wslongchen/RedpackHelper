@@ -5,6 +5,8 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Point;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -13,14 +15,22 @@ import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Display;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.accessibility.AccessibilityManager;
+import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
 import android.widget.AnalogClock;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -53,6 +63,7 @@ public class MainActivity extends Activity implements AccessibilityManager.Acces
         accessibilityManager = (AccessibilityManager) getSystemService(Context.ACCESSIBILITY_SERVICE);
         accessibilityManager.addAccessibilityStateChangeListener(this);
         updateServiceStatus();
+
     }
 
     private void explicitlyLoadPreferences() {
@@ -96,7 +107,12 @@ public class MainActivity extends Activity implements AccessibilityManager.Acces
     protected void onDestroy() {
         //移除监听服务
         accessibilityManager.removeAccessibilityStateChangeListener(this);
+        flag=false;
         super.onDestroy();
+    }
+
+    public void openMore(){
+        Toast.makeText(this, getString(R.string.click_more), Toast.LENGTH_LONG).show();
     }
 
     public void openAccessibility(View view) {
@@ -112,10 +128,7 @@ public class MainActivity extends Activity implements AccessibilityManager.Acces
     }
 
     public void openWechat(View view) {
-        Intent webViewIntent = new Intent(this, WebViewActivity.class);
-        webViewIntent.putExtra("title", getString(R.string.webview_github_title));
-        webViewIntent.putExtra("url", "https://github.com/geeeeeeeeek/WeChatLuckyMoney");
-        startActivity(webViewIntent);
+        new TipPopupWindows(this,pluginStatusIcon,1);
     }
 
     public void openSettings(View view) {
@@ -129,8 +142,19 @@ public class MainActivity extends Activity implements AccessibilityManager.Acces
     @Override
     public void onAccessibilityStateChanged(boolean enabled) {
         updateServiceStatus();
+
     }
 
+    boolean flag=false;
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (!flag) {
+            //showWindow();
+            flag=true;
+        }
+
+    }
     /**
      * 更新当前 HongbaoService 显示状态
      */
@@ -141,7 +165,12 @@ public class MainActivity extends Activity implements AccessibilityManager.Acces
         } else {
             pluginStatusText.setText(R.string.service_on);
             pluginStatusIcon.setBackgroundResource(R.mipmap.ic_start);
-            showDialog();
+        }
+    }
+
+    private void showWindow(){
+        if (!isServiceEnabled()) {
+            new TipPopupWindows(this,pluginStatusIcon,0);
         }
     }
 
@@ -154,7 +183,7 @@ public class MainActivity extends Activity implements AccessibilityManager.Acces
         List<AccessibilityServiceInfo> accessibilityServices =
                 accessibilityManager.getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_GENERIC);
         for (AccessibilityServiceInfo info : accessibilityServices) {
-            if (info.getId().equals(getPackageName() + "/.services.HongbaoService")) {
+            if (info.getId().equals(getPackageName() + "/.service.HongbaoService")) {
                 return true;
             }
         }
@@ -164,34 +193,83 @@ public class MainActivity extends Activity implements AccessibilityManager.Acces
     /***
      * 打开对话框
      */
-    public void showDialog(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        LayoutInflater inflater = getLayoutInflater();
-        final View layout = inflater.inflate(R.layout.dialog_tip, null);//获取自定义布局
-        builder.setView(layout);
-       /* builder.setIcon(R.drawable.ic_launcher);//设置标题图标
-        builder.setTitle(R.string.hello_world);//设置标题内容*/
-        //builder.setMessage("");//显示自定义布局内容
-        final AlertDialog dlg = builder.create();
+    public class TipPopupWindows extends PopupWindow implements View.OnClickListener{
 
-        Button button = (Button)layout.findViewById(R.id.btn_apply);
-        ImageView close = (ImageView)layout.findViewById(R.id.iv_close);
-        button.setOnClickListener(new View.OnClickListener() {
+        private Context mContext;
+        private int type;
+        public TipPopupWindows(Context mContext, View parent,int type) {
 
-            @Override
-            public void onClick(View arg0) {
+            final View view = View
+                    .inflate(mContext, R.layout.dialog_tip, null);
+            view.startAnimation(AnimationUtils.loadAnimation(mContext,
+                    R.anim.fade_ins));
+            RelativeLayout ll_popup = (RelativeLayout) view
+                    .findViewById(R.id.tip_popup);
+            ll_popup.startAnimation(AnimationUtils.loadAnimation(mContext,
+                    R.anim.push_bottom_in_2));
+            //setOutsideTouchable(true);
+            this.mContext=mContext;
+            this.type=type;
+            setContentView(view);
+            init(view);
+            setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+            setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
+            setBackgroundDrawable(new BitmapDrawable());
+            setFocusable(true);
+            showAtLocation(parent, Gravity.CENTER_HORIZONTAL, 0, 0);
+            backgroundAlpha(0.7f);
+            update();
 
+            setOnDismissListener(new OnDismissListener() {
+                @Override
+                public void onDismiss() {
+                    backgroundAlpha(1f);
+                }
+            });
+
+        }
+
+        private void init(View view){
+            Button button = (Button)view.findViewById(R.id.btn_apply);
+            ImageView close = (ImageView)view.findViewById(R.id.iv_close);
+            ImageView snow=(ImageView)view.findViewById(R.id.main_bg_snow);
+            ImageView wechat=(ImageView)view.findViewById(R.id.main_bg_wechat);
+            button.setOnClickListener(this);
+            close.setOnClickListener(this);
+            if(type==1){
+                snow.setVisibility(View.INVISIBLE);
+                button.setVisibility(View.INVISIBLE);
+                wechat.setVisibility(View.VISIBLE);
+            }else{
+                snow.setVisibility(View.VISIBLE);
+                button.setVisibility(View.VISIBLE);
+                wechat.setVisibility(View.INVISIBLE);
             }
-        });
-        close.setOnClickListener(new View.OnClickListener(){
+        }
 
-            @Override
-            public void onClick(View v) {
-                dlg.dismiss();
+        public void backgroundAlpha(float bgAlpha)
+        {
+            WindowManager.LayoutParams lp = ((Activity)mContext).getWindow().getAttributes();
+            lp.alpha = bgAlpha; //0.0-1.0
+            ((Activity)mContext).getWindow().setAttributes(lp);
+        }
+
+        @Override
+        public void onClick(View v) {
+
+            switch (v.getId()){
+                case R.id.iv_close:
+                    dismiss();
+                    break;
+                case R.id.btn_apply:
+
+                    break;
+                default:
+                    break;
             }
-        });
-
-        dlg.show();
+        }
     }
+
+
 }
 

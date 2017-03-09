@@ -54,11 +54,7 @@ public class WebViewActivity extends Activity {
                         Toast.makeText(getApplicationContext(), getString(R.string.download_backend), Toast.LENGTH_SHORT).show();
                         (new DownloadUtil()).enqueue(url, getApplicationContext());
                         return true;
-                    } else if (!url.contains("http")) {
-                        Toast.makeText(getApplicationContext(), getString(R.string.download_redirect), Toast.LENGTH_LONG).show();
-                        webViewBar.setText(getString(R.string.download_hint));
-                        return false;
-                    } else {
+                    }else {
                         view.loadUrl(url);
                         return false;
                     }
