@@ -11,6 +11,8 @@ android:
   - build-tools-25.0.2
   - android-N
   - extra
+before_install:
+  - chmod +x gradlew
 licenses:
   - android-sdk-license-.+
   - '.+'
