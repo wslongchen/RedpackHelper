@@ -9,10 +9,5 @@ android:
   - extra
 before_install:
   - chmod +x gradlew
-licenses:
-  - android-sdk-license-.+
-  - '.+'
-before_script:
-- mkdir "$ANDROID_HOME/licenses" || true
 script:
 - ./gradlew assembleRelease
